@@ -1,100 +1,132 @@
-<!DOCTYPE html>
+<style>
+.form-group {
+    display: block;
+    margin: 12px 0;
+}
+.form-group input {
+    display: block;
+}
 
-<html lang="sv">
+</style>
+<div class="container">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Könummer</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f4f4f4;
-        }
-        .container {
-            text-align: center;
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            font-size: 5rem;  /* Extra stor text */
-            color: #333;
-        }
-        button {
-            font-size: 1.2rem;
-            padding: 10px 20px;
-            margin-top: 10px;
-            margin-right: 10px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        input {
-            padding: 10px;
-            font-size: 1.2rem;
-            width: 80px;
-            text-align: center;
-            margin-top: 10px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        
-
-<h1>Nr: <span id="queueNumber">1</span></h1>
-        <button onclick="nextNumber()">Nästa nummer</button>
-        <button onclick="resetNumber()">Nollställ</button>
-        <div>
-            <input type="number" id="newNumber" placeholder="Sätt nummer">
-            <button onclick="setNumber()">Ändra nummer</button>
-        </div>
-        <!-- Ljudfil för pling-ljud -->
-        <audio id="plingSound" src="https://www.soundjay.com/button/beep-07.wav"></audio>
+<h2>Arbetsorder för Mobilreparation</h2>
+<form id="orderForm">
+    <div class="form-group">
+        <label for="customerName">Kundnamn:
+            <input id="customerName" required="" type="text" />
+        </label>
     </div>
+    <div class="form-group">
+        <label for="contactInfo">Kontaktinformation:
+            <input id="contactInfo" required="" type="text" />
+        </label>
+    </div>
+    <div class="form-group">
+        <label for="mobileModel">Mobilmodell:
+            <input id="mobileModel" required="" type="text" />
+        </label>
+    </div>
+    <div class="form-group">
+        <label for="problemDescription">Problem/Felet:
+            <textarea id="problemDescription" required="" rows="4"></textarea>
+        </label>
+    </div>
+    <div class="form-group">
+        <label for="estimatedCost">Beräknad kostnad:
+            <input id="estimatedCost" required="" type="text" />
+        </label>
+    </div>
+    <div class="form-group">
+        <button onclick="generatePDF()" type="button">Skapa PDF</button>
+    </div>
+</form>
+<!-- Lägg till jsPDF-biblioteket för att generera PDF -->
+</div>
 
-    <script>
-        let currentNumber = 0;
+<p>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        window.jsPDF = window.jspdf.jsPDF;
+    });
 
-        function nextNumber() {
-            currentNumber++;
-            document.getElementById("queueNumber").textContent = currentNumber;
-            playSound();  // Spela upp ljudet vid varje knapptryckning
+    function generatePDF() {
+        const customerName = document.getElementById("customerName").value;
+        const contactInfo = document.getElementById("contactInfo").value;
+        const mobileModel = document.getElementById("mobileModel").value;
+        const problemDescription = document.getElementById("problemDescription").value;
+        const estimatedCost = document.getElementById("estimatedCost").value;
+
+        // Hämta och uppdatera löpnummer från localStorage
+        let orderNumber = localStorage.getItem("orderNumber");
+        if (!orderNumber) {
+            orderNumber = 1; // Startvärde om inget nummer finns
+        } else {
+            orderNumber = parseInt(orderNumber) + 1; // Öka nummer för varje PDF
         }
+        localStorage.setItem("orderNumber", orderNumber); // Spara uppdaterat löpnummer
 
-        function resetNumber() {
-            currentNumber = 0;
-            document.getElementById("queueNumber").textContent = currentNumber;
-            playSound();
-        }
+        // Hämta det aktuella datumet och tiden
+        const now = new Date();
+        const date = now.toLocaleDateString('sv-SE'); // Svenskt datumformat
+        const time = now.toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' }); // HH:MM
 
-        function setNumber() {
-            const newNumber = parseInt(document.getElementById("newNumber").value);
-            if (!isNaN(newNumber) && newNumber > 0) {
-                currentNumber = newNumber;
-                document.getElementById("queueNumber").textContent = currentNumber;
-                playSound();
-            } else {
-                alert("Ange ett giltigt nummer.");
-            }
-        }
+        const doc = new jsPDF();
+        doc.setFontSize(12);
 
-        function playSound() {
-            const sound = document.getElementById("plingSound");
-            sound.currentTime = 0; // Startar ljudet från början
-            sound.play();
-        }
-    </script>
-</body>
-</html>
+        // Lägg till bilden högst upp 
+        const imageUrl = 'https://www.imobileit.se/imobileit_logo.png'; // Bild-URL
+        doc.addImage(imageUrl, 'JPEG', 60, 10, 91, 18); // Justera X, Y, bredd, höjd
+
+        // Lägg till företagsnamnet centrerat under bilden
+        doc.setFontSize(16);
+        doc.text("iMobile & IT Solution AB", 105, 40, { align: "center" });
+
+        // Lägg till löpnummer, datum och tid
+        doc.setFontSize(12);
+        doc.text(`Löpnummer: ${orderNumber}`, 90, 50);
+       
+       
+        // Lägg till rubrik och arbetsorderinformation
+        doc.text("Arbetsorder för Mobilreparation", 77, 60).setFont(undefined, 'bold');
+        doc.text(`Kundnamn:`, 20, 80).setFont(undefined, 'normal');
+        doc.text(`${customerName}`, 80, 80).setFont(undefined, 'bold');
+        doc.text(`Kontaktinformation:`, 20, 90).setFont(undefined, 'normal');
+        doc.text(`${contactInfo}`, 80, 90).setFont(undefined, 'bold');
+        doc.text(`Mobilmodell:`, 20, 100).setFont(undefined, 'normal');
+        doc.text(`${mobileModel}`, 80, 100).setFont(undefined, 'bold');
+        doc.text("Problem/Felet:", 20, 110).setFont(undefined, 'normal');
+        doc.text(problemDescription, 80, 110, {maxWidth: 100}).setFont(undefined, 'bold');
+        doc.text(`Beräknad kostnad:`, 20, 120).setFont(undefined, 'bold');
+        doc.text(`${estimatedCost}`, 80, 120).setFont(undefined, 'normal');
+
+	// Lägg till ansvar
+	doc.text("ANSVAR", 80, 135);
+	
+	//Lägg till Text
+	doc.setFontSize(8);
+	doc.text("1. Inlämnad enhet:", 20, 143);
+	doc.text("iMobile ansvarar för inlämnad enhet i högst 3 månader. Underlåtenhet att besvara", 20, 146);
+	doc.text("kostnadsförslag eller annan kommunikation från iMobile innebär att enheten tillfaller iMobile efter denna tid.", 20, 149);
+	doc.text("2. Bifogade tillbehör:", 20, 153);
+	doc.text("iMobile tar inte något ansvar för inskickade tillbehör. Bifoga aldrig andra tillbehör förutom", 20, 156);
+	doc.text("batteri, bifoga aldrig originalkartong eller original faktura/kvitto. iMobile ersätter inga tillbehör, kvitton/fakturor", 20, 159);
+	doc.text("eller emballage som påstås komma bort under reparationen. Andra tillbehör än batterier bifogas endast om det är relaterat till felet. ", 20, 162);
+	doc.text("3. Innehåll:", 20, 166);
+	doc.text("I samband med reparation raderas innehållet i din enhet som t.ex. telefonbok, bilder, m.m. iMobile ansvarar inte för ändrat och/eller förlorat innehåll. ", 20, 169);
+	doc.text("4. Reparationsgaranti:", 20, 173);
+	doc.text("Reparationsgarantin är på två månader, räknat från det att man har hämtat ut och betalat för reparationen.", 20, 176);
+	doc.text("Reparationsgarantin omfattar inte skador som har åsamkats med våld eller tappat mobilen samt åsamkat inre och yttre skador.", 20, 179);
+
+	// Lägg till datum och underskriftsfält längst ner
+	doc.setFontSize(12);
+        doc.text(`Datum: ${date}`, 20, 200);
+        doc.text(`Tid: ${time}`, 60, 200); // Placerat till höger
+
+        doc.text("Underskrift: ___________________________", 20, 220);
+
+        doc.save("arbetsorder.pdf");
+    }
+</script>
+</p>
