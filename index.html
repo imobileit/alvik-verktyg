@@ -1,4 +1,9 @@
 <style>
+html, body {
+    width: 100%;
+    max-width: 100%;
+    font-family: "Helvetica Neue",Helvetica,Arial,serif;
+}
 .form-group {
     display: block;
     margin: 12px 0;
@@ -6,6 +11,48 @@
 .form-group input {
     display: block;
 }
+
+.container {
+    width: 100%;
+    max-width: calc(100% - 24px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;        
+    margin-left: 12px;
+    margin-right: 12px;
+}
+
+input[type=text], select, textarea {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+input[type=submit], button, input[type=button] {
+  width: 100%;
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+h2 {
+font-size: 1.2rem;    
+}
+
 
 </style>
 <div class="container">
@@ -90,41 +137,41 @@
        
         // Lägg till rubrik och arbetsorderinformation
         doc.text("Arbetsorder för Mobilreparation", 77, 60).setFont(undefined, 'bold');
-        doc.text(`Kundnamn:`, 20, 80).setFont(undefined, 'normal');
-        doc.text(`${customerName}`, 80, 80).setFont(undefined, 'bold');
-        doc.text(`Kontaktinformation:`, 20, 90).setFont(undefined, 'normal');
-        doc.text(`${contactInfo}`, 80, 90).setFont(undefined, 'bold');
-        doc.text(`Mobilmodell:`, 20, 100).setFont(undefined, 'normal');
-        doc.text(`${mobileModel}`, 80, 100).setFont(undefined, 'bold');
-        doc.text("Problem/Felet:", 20, 110).setFont(undefined, 'normal');
-        doc.text(problemDescription, 80, 110, {maxWidth: 100}).setFont(undefined, 'bold');
-        doc.text(`Beräknad kostnad:`, 20, 120).setFont(undefined, 'bold');
-        doc.text(`${estimatedCost}`, 80, 120).setFont(undefined, 'normal');
+        doc.text(`Kundnamn:`, 20, 90).setFont(undefined, 'normal');
+        doc.text(`${customerName}`, 80, 90).setFont(undefined, 'bold');
+        doc.text(`Kontaktinformation:`, 20, 100).setFont(undefined, 'normal');
+        doc.text(`${contactInfo}`, 80, 100).setFont(undefined, 'bold');
+        doc.text(`Mobilmodell:`, 20, 110).setFont(undefined, 'normal');
+        doc.text(`${mobileModel}`, 80, 110).setFont(undefined, 'bold');
+        doc.text("Problem/Felet:", 20, 120).setFont(undefined, 'normal');
+        doc.text(problemDescription, 80, 120, {maxWidth: 100}).setFont(undefined, 'bold');
+        doc.text(`Beräknad kostnad:`, 20, 150).setFont(undefined, 'bold');
+        doc.text(`${estimatedCost}`, 80, 150).setFont(undefined, 'normal');
 
 	// Lägg till ansvar
-	doc.text("ANSVAR", 80, 135);
+	doc.text("ANSVAR", 80, 185);
 	
 	//Lägg till Text
 	doc.setFontSize(8);
-	doc.text("1. Inlämnad enhet:", 20, 143);
-	doc.text("iMobile ansvarar för inlämnad enhet i högst 3 månader. Underlåtenhet att besvara", 20, 146);
-	doc.text("kostnadsförslag eller annan kommunikation från iMobile innebär att enheten tillfaller iMobile efter denna tid.", 20, 149);
-	doc.text("2. Bifogade tillbehör:", 20, 153);
-	doc.text("iMobile tar inte något ansvar för inskickade tillbehör. Bifoga aldrig andra tillbehör förutom", 20, 156);
-	doc.text("batteri, bifoga aldrig originalkartong eller original faktura/kvitto. iMobile ersätter inga tillbehör, kvitton/fakturor", 20, 159);
-	doc.text("eller emballage som påstås komma bort under reparationen. Andra tillbehör än batterier bifogas endast om det är relaterat till felet. ", 20, 162);
-	doc.text("3. Innehåll:", 20, 166);
-	doc.text("I samband med reparation raderas innehållet i din enhet som t.ex. telefonbok, bilder, m.m. iMobile ansvarar inte för ändrat och/eller förlorat innehåll. ", 20, 169);
-	doc.text("4. Reparationsgaranti:", 20, 173);
-	doc.text("Reparationsgarantin är på två månader, räknat från det att man har hämtat ut och betalat för reparationen.", 20, 176);
-	doc.text("Reparationsgarantin omfattar inte skador som har åsamkats med våld eller tappat mobilen samt åsamkat inre och yttre skador.", 20, 179);
+	doc.text("1. Inlämnad enhet:", 20, 193);
+	doc.text("iMobile ansvarar för inlämnad enhet i högst 3 månader. Underlåtenhet att besvara", 20, 196);
+	doc.text("kostnadsförslag eller annan kommunikation från iMobile innebär att enheten tillfaller iMobile efter denna tid.", 20, 199);
+	doc.text("2. Bifogade tillbehör:", 20, 203);
+	doc.text("iMobile tar inte något ansvar för inskickade tillbehör. Bifoga aldrig andra tillbehör förutom", 20, 206);
+	doc.text("batteri, bifoga aldrig originalkartong eller original faktura/kvitto. iMobile ersätter inga tillbehör, kvitton/fakturor", 20, 209);
+	doc.text("eller emballage som påstås komma bort under reparationen. Andra tillbehör än batterier bifogas endast om det är relaterat till felet. ", 20, 212);
+	doc.text("3. Innehåll:", 20, 216);
+	doc.text("I samband med reparation raderas innehållet i din enhet som t.ex. telefonbok, bilder, m.m. iMobile ansvarar inte för ändrat och/eller förlorat innehåll. ", 20, 219);
+	doc.text("4. Reparationsgaranti:", 20, 223);
+	doc.text("Reparationsgarantin är på två månader, räknat från det att man har hämtat ut och betalat för reparationen.", 20, 226);
+	doc.text("Reparationsgarantin omfattar inte skador som har åsamkats med våld eller tappat mobilen samt åsamkat inre och yttre skador.", 20, 229);
 
 	// Lägg till datum och underskriftsfält längst ner
 	doc.setFontSize(12);
-        doc.text(`Datum: ${date}`, 20, 200);
-        doc.text(`Tid: ${time}`, 60, 200); // Placerat till höger
+        doc.text(`Datum: ${date}`, 20, 250);
+        doc.text(`Tid: ${time}`, 60, 250); // Placerat till höger
 
-        doc.text("Underskrift: ___________________________", 20, 220);
+        doc.text("Underskrift: ___________________________", 20, 270);
 
         doc.save("arbetsorder.pdf");
     }
