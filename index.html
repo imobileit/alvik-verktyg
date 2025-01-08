@@ -115,15 +115,6 @@
                 const problemDescription = document.getElementById("problemDescription").value;
                 const estimatedCost = document.getElementById("estimatedCost").value;
 
-                // Hämta och uppdatera löpnummer från localStorage
-                let orderNumber = localStorage.getItem("orderNumber");
-                if (!orderNumber) {
-                    orderNumber = 1; // Startvärde om inget nummer finns
-                } else {
-                    orderNumber = parseInt(orderNumber) + 1; // Öka nummer för varje PDF
-                }
-                localStorage.setItem("orderNumber", orderNumber); // Spara uppdaterat löpnummer
-
                 // Hämta det aktuella datumet och tiden
                 const now = new Date();
                 const date = now.toLocaleDateString('sv-SE'); // Svenskt datumformat
@@ -142,8 +133,6 @@
 
                 // Lägg till löpnummer, datum och tid
                 doc.setFontSize(12);
-                doc.text(`Löpnummer: ${orderNumber}`, 90, 50);
-
 
                 // Lägg till rubrik och arbetsorderinformation
                 doc.text("Arbetsorder för Mobilreparation", 77, 60).setFont(undefined, 'bold');
@@ -183,7 +172,9 @@
 
                 doc.text("Underskrift: ___________________________", 20, 270);
 
-                doc.save("arbetsorder.pdf");
+                const dateString = new Date().toISOString().replaceAll(':', '_').substr(0, 19);
+                const fileName = `arbetsorder_${dateString}.pdf`;
+                doc.save(fileName);
 
                 // Clear the input fields
                 document.getElementById("orderForm").reset();
